@@ -42,7 +42,6 @@
     function preload ()
     {
         this.load.setBaseURL('https://labs.phaser.io');
-        console.log('test commit');
 
         // this.load.image('sky', 'assets/skies/space3.png');
         this.load.image('sky', 'assets/skies/sky4.png');
@@ -142,15 +141,13 @@
         this.physics.add.collider(stars, platforms);
         this.physics.add.overlap(player, stars, collectStar, null, this);
 
-        bombs = this.physics.add.sprite(Phaser.Math.Between(0, 400), 10, 'bomb');
-        bombs.setScale(.2,.2);
+        bombs = this.physics.add.group();
 
         this.physics.add.collider(bombs, platforms);
 
         this.physics.add.collider(player, bombs, hitBomb, null, this);
         
         emitter.startFollow(player);
-
     }
 
     function collectStar (player, star)
@@ -159,7 +156,7 @@
         score++;
         scoreText.setText('Score: ' + score);
         getStars.play();
-        if (stars.countActive(true) === 1)
+        if (stars.countActive(true) === 0)
         {
             stars.children.iterate(function (child) {
 
@@ -170,13 +167,10 @@
             var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
 
             var bomb = bombs.create(x, 10, 'bomb');
-            // bomb.setBounce(1);
+            bomb.setBounce(1);
             bomb.setCollideWorldBounds(true);
             bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
             bomb.setScale(.2,.2);
-            // bomb.child.ChildUpdate(true);
-            // bomb.startFollow(player);
-            // this.physics.moveToObject(bomb, player, 100);
 
         }
     }
@@ -201,7 +195,6 @@
         // soundEffect.stop();
     }
     function update(){
-        // enemyFollows();
         cursors = this.input.keyboard.createCursorKeys();
         if (cursors.left.isDown || this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A).isDown)
         {
@@ -232,16 +225,6 @@
             score = 0; this.scene.restart();
 
         }
-    }
-    function bombPos(){
-        if(bombs.x < 800)
-            bombs.setXY = {x: bombs.x+=10, y: bombs.y};
-        else            
-            bombs.setXY = {x: bombs.x-=10, y: bombs.y};
-    }
-    function enemyFollows () {
-        this.physics.moveToObject(bombs, player, 100);
-        // console.log(this.physics);
     }
     </script>
 </body>
